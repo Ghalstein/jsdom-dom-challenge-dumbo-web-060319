@@ -2,7 +2,8 @@ let running = true;
 const TIME = document.querySelector('#counter');
 const PLUS = document.querySelector('#plus');
 const MINUS = document.querySelector('#minus');
-const LIKE = document.querySelector('#like')
+const LIKE = document.querySelector('#like');
+const LIKES = document.querySelector('#likes');
 
 
 function incrementTime() {
@@ -25,8 +26,12 @@ function manualDecrement() {
 	TIME.innerHTML = parseInt(TIME.innerHTML) - 1;
 }
 
-function addLike(likeB) {
-
+function addLike(time) {
+	let second = "second"
+	if (time > 1 || time < 1) {
+		second = "seconds"
+	}
+	LIKES.innerHTML += `<li>You hit like at ${time} ${second}.</li>`
 }
 
 // timer starts up on page load 
@@ -47,7 +52,7 @@ document.addEventListener("click", event => {
 	}
 	else if (event.target == LIKE) {
 		console.log(event.target)
-		addLike(event.target, TIME.innerText);
+		addLike(TIME.innerText);
 	}
 
 })
