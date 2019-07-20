@@ -4,16 +4,8 @@ const PLUS = document.querySelector('#plus');
 const MINUS = document.querySelector('#minus');
 const LIKE = document.querySelector('#like');
 const LIKES = document.querySelector('#likes');
-
-
-function incrementTime() {
-	if (running) {
-		console.log(TIME);
-		setInterval(event => {
-			TIME.innerHTML = parseInt(TIME.innerHTML) + 1;
-		}, 1000);
-	}
-}
+const PAUSE = document.querySelector('#pause');
+const ALLBUTTONS = document.querySelectorAll('button');
 
 // increments the timer
 function manualIncrement() {
@@ -26,6 +18,12 @@ function manualDecrement() {
 	TIME.innerHTML = parseInt(TIME.innerHTML) - 1;
 }
 
+const TIMER = setInterval(fn => {
+	if (running) {
+		manualIncrement();
+	}
+}, 1000);
+
 function addLike(time) {
 	let second = "second"
 	if (time > 1 || time < 1) {
@@ -34,9 +32,28 @@ function addLike(time) {
 	LIKES.innerHTML += `<li>You hit like at ${time} ${second}.</li>`
 }
 
+function pause() {
+	ALLBUTTONS.forEach(button => {
+		if (running && button.id !== 'pause') {
+			button.disabled = true;
+		}
+		else {
+			button.disabled = false;
+		}
+	});
+
+	if (running) {
+		PAUSE.innerText = "resume"
+	}
+	else {
+		PAUSE.innerText = "pause"
+	}
+	running = !running;
+}
+
 // timer starts up on page load 
 document.addEventListener("DOMContentLoaded", event => {
-	incrementTime();
+	TIMER;
 });
 
 // event listener for all of the buttons
@@ -50,9 +67,12 @@ document.addEventListener("click", event => {
 	else if (event.target === MINUS) {
 		manualDecrement();
 	}
-	else if (event.target == LIKE) {
+	else if (event.target === LIKE) {
 		console.log(event.target)
 		addLike(TIME.innerText);
+	}
+	else if (event.target === PAUSE) {
+		pause();
 	}
 
 })
