@@ -6,6 +6,8 @@ const LIKE = document.querySelector('#like');
 const LIKES = document.querySelector('#likes');
 const PAUSE = document.querySelector('#pause');
 const ALLBUTTONS = document.querySelectorAll('button');
+const COMMENTS = document.querySelector('#list-of-comments');
+const COMMENT = document.querySelector('#input');
 
 // increments the timer
 function manualIncrement() {
@@ -18,20 +20,28 @@ function manualDecrement() {
 	TIME.innerHTML = parseInt(TIME.innerHTML) - 1;
 }
 
+// timer that stops and starts depending on whether its paused or not
 const TIMER = setInterval(fn => {
 	if (running) {
 		manualIncrement();
 	}
 }, 1000);
 
-function addLike(time) {
-	let second = "second"
+// pluralizes seconds when needed
+function second(time) {
 	if (time > 1 || time < 1) {
-		second = "seconds"
+		return "seconds"
 	}
-	LIKES.innerHTML += `<li>You hit like at ${time} ${second}.</li>`
+	else
+		return "second"
 }
 
+//adds a like at a certain time
+function addLike(time) {
+	LIKES.innerHTML += `<li>You hit like at ${time} ${second(time)}.</li>`
+}
+
+// pauses the whole app and disables any funcitonality besides resume and visa versa
 function pause() {
 	ALLBUTTONS.forEach(button => {
 		if (running && button.id !== 'pause') {
@@ -74,5 +84,15 @@ document.addEventListener("click", event => {
 	else if (event.target === PAUSE) {
 		pause();
 	}
+});
 
-})
+// adds a comment
+function addComment() {
+	COMMENTS.innerHTML += `<li>${COMMENT.value} @ ${TIME.innerHTML} ${second(parseInt(TIME.innerHTML))}.</li>`
+}
+
+// listens for submit of comment
+document.addEventListener("submit", event => {
+	event.preventDefault();
+	addComment();
+});
